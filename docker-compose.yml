@@ -36,12 +36,13 @@ services:
   bot:
     build:
       context: .
-      dockerfile: ./bot/Dockerfile
-    depends_on:
-      - backend
+      dockerfile: ./lvbot/Dockerfile
+  
     environment:
       API_BASE_URL: http://backend:8000
-
+      BOT_TOKEN: 8362762788:AAG2IVIFES7nMplxOlJTynyS9s0qPmL9MqQ
+      PUBLIC_BASE_URL: http://lavrpro.ru
+      LOG_LEVEL: INFO
 
   nginx:
     image: nginx:stable-alpine
