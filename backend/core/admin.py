@@ -4,9 +4,11 @@ from .models import Brand, Category, Product, ProductFile, Question
 
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_premium')
-    list_filter = ('is_premium',)
-
+    list_display = ("name", "is_premium", "sort_order")
+    list_filter = ("is_premium",)
+    search_fields = ("name",)
+    ordering = ("is_premium", "sort_order", "name")
+    list_editable = ("sort_order",)  # вот это ключ — правим прямо из списка
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):

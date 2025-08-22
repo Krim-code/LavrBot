@@ -2,6 +2,7 @@ from rest_framework import viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Brand, Category, Product, Question
+from django.db.models import QuerySet
 from .serializers import (
     BrandSerializer,
     CategorySerializer,
@@ -9,6 +10,13 @@ from .serializers import (
     QuestionSerializer
 )
 
+def _apply_ordering(qs: QuerySet, request):
+    ordering = request.query_params.get("ordering")
+    allowed = {"name", "-name", "id", "-id", "sort_order", "-sort_order"}
+    if ordering in allowed:
+        return qs.order_by(ordering)
+    # дефолт: ручной порядок, потом по имени
+    return qs.order_by("sort_order", "name")
 
 class BrandViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Brand.objects.all()
@@ -16,13 +24,13 @@ class BrandViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(detail=False)
     def premium(self, request):
-        premium_brands = self.queryset.filter(is_premium=True)
-        return Response(self.get_serializer(premium_brands, many=True).data)
+        qs = _apply_ordering(Brand.objects.filter(is_premium=True), request)
+        return Response(self.get_serializer(qs, many=True).data)
 
     @action(detail=False)
     def regular(self, request):
-        regular_brands = self.queryset.filter(is_premium=False)
-        return Response(self.get_serializer(regular_brands, many=True).data)
+        qs = _apply_ordering(Brand.objects.filter(is_premium=False), request)
+        return Response(self.get_serializer(qs, many=True).data)
     
     @action(detail=True, methods=["get"])
     def categories(self, request, pk=None):

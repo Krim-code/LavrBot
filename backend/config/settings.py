@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-usn1qk%2*1-vk6-$547f^1ldehshylenfxafi8vuq*29&^z6##'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "change-me")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
 
 # Application definition
@@ -34,13 +34,9 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'rest_framework',
     'core',
-    
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.admin','django.contrib.auth','django.contrib.contenttypes',
+    'django.contrib.sessions','django.contrib.messages','django.contrib.staticfiles',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -77,9 +73,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB", "lavrdb"),
+        "USER": os.getenv("POSTGRES_USER", "lavruser"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "lavrpass"),
+        "HOST": os.getenv("POSTGRES_HOST", "db"),
+        "PORT": int(os.getenv("POSTGRES_PORT", "5432")),
+        "CONN_MAX_AGE": 60,
     }
 }
 
@@ -125,24 +126,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-INSTALLED_APPS += ["storages"]
-
-
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-# AWS_ACCESS_KEY_ID = "UN2RBZMRDQCM29ZX7JXS"
-# AWS_SECRET_ACCESS_KEY = "uWtSmRxh2rWAWEUS9byeFFSs0VhsUmfLK2oFY3cy"
-# AWS_STORAGE_BUCKET_NAME = "fb624e02-28b918dc-d424-4978-a02b-ee45c691c519"
-# AWS_S3_REGION_NAME = "ru-1"  # или другой регион
-# AWS_S3_ENDPOINT_URL = "https://s3.twcstorage.ru"  # или кастомный (для minio или localstack)
-
-# AWS_QUERYSTRING_AUTH = False  # чтобы были чистые ссылки без временных токенов
-# AWS_DEFAULT_ACL = None        # чтобы не было проблем с правами
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",

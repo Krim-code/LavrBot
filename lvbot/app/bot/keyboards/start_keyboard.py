@@ -27,6 +27,6 @@ async def main_menu_keyboard() -> InlineKeyboardMarkup:
         keyboard.append(row)
 
     keyboard.append([InlineKeyboardButton(text="Остальные бренды", callback_data="brands_regular")])
-    keyboard.append([InlineKeyboardButton(text="Задать вопрос по товару", callback_data="ask_question")])
+    # keyboard.append([InlineKeyboardButton(text="Задать вопрос по товару", callback_data="ask_question")])
     keyboard.append([InlineKeyboardButton(text="Поиск по артикулу", switch_inline_query_current_chat="")])
     return InlineKeyboardMarkup(inline_keyboard=keyboard)

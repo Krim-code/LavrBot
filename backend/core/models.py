@@ -7,7 +7,15 @@ class Brand(models.Model):
     description = models.TextField(blank=True)
     is_premium = models.BooleanField(default=False)
     archive = models.FileField(upload_to='brands/zips/', blank=True, null=True)
-    
+
+    # ручной порядок
+    sort_order = models.PositiveIntegerField(default=0, db_index=True)
+
+    class Meta:
+        ordering = ("sort_order", "name")  # дефолтная сортировка везде
+        verbose_name = "Бренд"
+        verbose_name_plural = "Бренды"
+
     def __str__(self):
         return self.name
 

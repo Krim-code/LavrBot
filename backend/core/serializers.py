@@ -2,10 +2,12 @@ from rest_framework import serializers
 from .models import Brand, Category, Product, ProductFile, Question
 
 
+# core/serializers.py
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
-        fields = ['id', 'name', 'description' ,'is_premium', 'archive']
+        fields = ["id", "name", "description", "is_premium", "archive", "sort_order"]
+
 
 
 class CategorySerializer(serializers.ModelSerializer):

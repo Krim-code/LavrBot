@@ -36,9 +36,10 @@ COPY lvbot/.env.example ./
 # Телеге порт не нужен, но оставлю как метку
 EXPOSE 8080
 
-# healthcheck мягкий: просто питон жив
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD python -c "import sys; sys.exit(0)"
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=5 \
+  CMD bash -lc 'pgrep -f "app\.main" >/dev/null && wget -qO- http://backend:8000/healthz >/dev/null'
+
 
 # запуск
 ENTRYPOINT ["python", "-m", "app.main"]
