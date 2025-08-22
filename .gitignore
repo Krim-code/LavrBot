@@ -1,3 +1,6 @@
 .venv
 /backend/.env
 /lvbot/.env
+/backend/*.sqlite3
+/backend/media
+/backend/static
