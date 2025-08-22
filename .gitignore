@@ -4,3 +4,4 @@
 /backend/*.sqlite3
 /backend/media
 /backend/static
+__pycache__
