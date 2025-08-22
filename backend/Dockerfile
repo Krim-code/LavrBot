@@ -16,8 +16,10 @@ COPY ./backend/requirements.txt .
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
+
 COPY ./backend .
 
+RUN chmod +x ./entrypoint.sh
 
 EXPOSE 8000
 
